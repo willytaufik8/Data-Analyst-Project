@@ -1,166 +1,166 @@
 # Sales Performance Dashboard
 
-Project analisis data untuk memantau performa penjualan melalui proses ekstraksi data dari database SQL, penggabungan data transaksi, perhitungan metrik penjualan, dan visualisasi interaktif menggunakan Microsoft Excel.
+A data analytics project for monitoring sales performance through SQL data extraction, transactional data integration, sales metric calculations, and interactive visualization in Microsoft Excel.
 
-Dataset yang digunakan adalah **ClassicModels**, yaitu dataset penjualan produk model kendaraan dan koleksi terkait. Hasil analisis dirangkum dalam workbook Excel yang berisi data transaksi terintegrasi, PivotTable, metrik performa, serta grafik analisis.
+The dataset used in this project is **ClassicModels**, a sales dataset containing vehicle models and related collectible products. The analysis results are summarized in an Excel workbook containing integrated transaction data, PivotTables, performance metrics, and charts.
 
-## Tujuan Project
+## Project Objectives
 
-Project ini dibuat untuk menjawab beberapa pertanyaan bisnis berikut:
+This project was created to answer the following business questions:
 
-- Berapa total sales, cost, profit, dan profit margin?
-- Produk dan product line apa yang paling banyak terjual?
-- Bagaimana tren sales dan profit setiap bulan serta setiap tahun?
-- Negara mana yang memberikan kontribusi profit terbesar?
-- Siapa customer dengan jumlah pembelian/order terbanyak?
-- Apa peluang tindakan bisnis berdasarkan pola penjualan yang ditemukan?
+- What are the total sales, cost, profit, and profit margin?
+- Which products and product lines have the highest sales volume?
+- How do sales and profit trends change by month and year?
+- Which countries contribute the most profit?
+- Which customers have the highest number of purchases/orders?
+- What business opportunities and actions can be identified from the sales patterns?
 
-## Alur Data
+## Data Flow
 
 ```text
-Database ClassicModels
+ClassicModels Database
         |
         v
 Data.sql
-  (struktur dan data tabel)
+  (database structure and source data)
         |
         v
 Ekspor SQL.sql
-  (JOIN + perhitungan metrik)
+  (JOINs + metric calculations)
         |
         v
-Workbook Excel
-  (Project + PivotTable + chart)
+Excel Workbook
+  (Project + PivotTables + charts)
         |
         v
 Sales Performance Dashboard / Report
 ```
 
-Query pada `Ekspor SQL.sql` menggabungkan tabel berikut:
+The query in `Ekspor SQL.sql` combines the following tables:
 
-- `customers` untuk identitas customer dan negara
-- `orders` untuk tanggal serta nomor order
-- `orderdetails` untuk jumlah unit dan harga jual per item
-- `products` untuk nama produk, product line, dan harga beli
+- `customers` for customer identity and country
+- `orders` for order dates and order numbers
+- `orderdetails` for ordered quantities and selling prices per item
+- `products` for product names, product lines, and buying prices
 
-Query menghasilkan kolom turunan berikut:
+The query produces the following calculated columns:
 
 - `Sales = priceEach × quantityOrdered`
 - `Cost = buyPrice × quantityOrdered`
 - `Profit = Sales − Cost`
-- `purchaseNumber` menggunakan `DENSE_RANK()` untuk memberi urutan pembelian customer berdasarkan tanggal order
+- `purchaseNumber`, calculated with `DENSE_RANK()` to assign each customer's purchase sequence based on the order date
 
-## Isi Repository
+## Repository Contents
 
-| File | Deskripsi |
+| File | Description |
 |---|---|
-| [`Data.sql`](Data.sql) | SQL dump database `classicmodels`, termasuk struktur tabel dan data sumber. |
-| [`Ekspor SQL.sql`](Ekspor%20SQL.sql) | Query ekstraksi dan transformasi data transaksi untuk kebutuhan analisis. |
-| [`Dashboard Project 2.0.xlsx`](Dashboard%20Project%202.0.xlsx) | Workbook Excel berisi data Project, PivotTable, metrik, dan visualisasi. |
-| [`Personal Project By Taufik Willy H..pdf`](Personal%20Project%20By%20Taufik%20Willy%20H..pdf) | Laporan presentasi hasil analisis dan rekomendasi bisnis. |
+| [`Data.sql`](Data.sql) | SQL dump of the `classicmodels` database, including table structures and source data. |
+| [`Ekspor SQL.sql`](Ekspor%20SQL.sql) | SQL query for extracting and transforming the transactional data for analysis. |
+| [`Dashboard Project 2.0.xlsx`](Dashboard%20Project%202.0.xlsx) | Excel workbook containing the Project dataset, PivotTables, metrics, and visualizations. |
+| [`Personal Project By Taufik Willy H..pdf`](Personal%20Project%20By%20Taufik%20Willy%20H..pdf) | Presentation report containing the analysis results and business recommendations. |
 
-## Struktur Workbook Excel
+## Excel Workbook Structure
 
-Workbook `Dashboard Project 2.0.xlsx` memiliki tiga worksheet:
+The `Dashboard Project 2.0.xlsx` workbook contains three worksheets:
 
-- **Pivot**: ringkasan metrik, analisis product line, top product, sales tahunan-bulanan, profit berdasarkan negara, profit bulanan, dan top buyer.
-- **Project**: dataset transaksi hasil query SQL yang telah disiapkan untuk analisis.
-- **Dashboard**: worksheet yang disediakan untuk tampilan dashboard.
+- **Pivot**: summary metrics, product line analysis, top products, monthly and yearly sales, profit by country, monthly profit, and top buyers.
+- **Project**: the transaction-level dataset produced from the SQL query and prepared for analysis.
+- **Dashboard**: the worksheet provided for the dashboard view.
 
-## Data Dictionary Worksheet `Project`
+## Data Dictionary: `Project` Worksheet
 
-Worksheet `Project` menggunakan satu baris sebagai satu **detail produk dalam sebuah order**. Oleh karena itu, satu `orderNumber` dapat muncul di beberapa baris apabila order tersebut berisi beberapa produk.
+The `Project` worksheet uses one row for one **product detail within an order**. Therefore, a single `orderNumber` can appear on multiple rows when an order contains multiple products.
 
-| Variabel | Tipe/format | Deskripsi |
+| Variable | Type/Format | Description |
 |---|---|---|
-| `orderDate` | Date | Tanggal ketika order dibuat. Pada file Excel, tanggal dapat tersimpan sebagai serial date Excel. Digunakan untuk analisis tren berdasarkan tahun dan bulan. |
-| `orderNumber` | Integer | Nomor unik order. Satu order dapat memiliki beberapa baris detail produk. |
-| `customerNumber` | Integer | ID unik customer yang melakukan order. |
-| `customerName` | Text | Nama perusahaan/customer pembeli. |
-| `country` | Text | Negara tempat customer berada. Digunakan untuk analisis geografis dan profit per negara. |
-| `productLine` | Text/kategori | Kategori atau lini produk, misalnya `Classic Cars`, `Vintage Cars`, `Motorcycles`, `Planes`, `Ships`, `Trains`, serta `Trucks and Buses`. |
-| `productName` | Text | Nama spesifik produk yang dijual. |
-| `quantityOrdered` | Integer | Jumlah unit produk pada baris order tersebut. Dapat dijumlahkan untuk memperoleh total unit terjual. |
-| `priceEach` | Decimal | Harga jual per unit pada saat transaksi. Nilai ini berasal dari detail order dan dapat berbeda antar transaksi. |
-| `buyPrice` | Decimal | Harga beli/modal per unit produk. Digunakan untuk menghitung cost. |
-| `Sales` | Decimal | Nilai penjualan pada baris transaksi. Rumus: `priceEach × quantityOrdered`. |
-| `Cost` | Decimal | Total biaya produk pada baris transaksi. Rumus: `buyPrice × quantityOrdered`. |
-| `Profit` | Decimal | Profit kotor pada baris transaksi. Rumus: `Sales − Cost`. |
-| `purchaseNumber` | Integer | Urutan pembelian customer berdasarkan `orderDate`, dihitung dengan `DENSE_RANK()` dan dipartisi berdasarkan `customerNumber`. Nilai yang sama dapat muncul pada beberapa baris produk dalam order/tanggal pembelian yang sama. |
+| `orderDate` | Date | The date when the order was placed. In Excel, the date may be stored internally as an Excel serial date. Used for monthly and yearly trend analysis. |
+| `orderNumber` | Integer | The unique order number. One order can contain multiple product-detail rows. |
+| `customerNumber` | Integer | The unique ID of the customer who placed the order. |
+| `customerName` | Text | The name of the customer company or buyer. |
+| `country` | Text | The country where the customer is located. Used for geographic analysis and profit-by-country analysis. |
+| `productLine` | Text/Category | The product category or product line, such as `Classic Cars`, `Vintage Cars`, `Motorcycles`, `Planes`, `Ships`, `Trains`, and `Trucks and Buses`. |
+| `productName` | Text | The specific name of the product sold. |
+| `quantityOrdered` | Integer | The number of units ordered on the transaction-detail row. Can be summed to calculate total units sold. |
+| `priceEach` | Decimal | The selling price per unit at the time of the transaction. This value comes from the order detail and may vary between transactions. |
+| `buyPrice` | Decimal | The buying price or unit cost of the product. Used to calculate cost. |
+| `Sales` | Decimal | The sales value for the transaction-detail row. Formula: `priceEach × quantityOrdered`. |
+| `Cost` | Decimal | The total product cost for the transaction-detail row. Formula: `buyPrice × quantityOrdered`. |
+| `Profit` | Decimal | The gross profit for the transaction-detail row. Formula: `Sales − Cost`. |
+| `purchaseNumber` | Integer | The customer's purchase sequence based on `orderDate`, calculated with `DENSE_RANK()` and partitioned by `customerNumber`. The same value can appear on multiple product rows from the same order/date. |
 
-### Catatan Penggunaan Variabel
+### Variable Usage Notes
 
-- `Sales`, `Cost`, dan `Profit` adalah metrik level **order detail**, bukan nilai unik per order.
-- Untuk menghitung total sales atau profit, gunakan agregasi `SUM()` pada kolom terkait.
-- Untuk menghitung jumlah order, gunakan `COUNT(DISTINCT orderNumber)`, bukan jumlah baris worksheet.
-- Untuk menghitung jumlah customer, gunakan `COUNT(DISTINCT customerNumber)`.
-- `purchaseNumber` tidak sebaiknya dihitung dengan `COUNT()` sebagai jumlah order karena kolom ini merupakan ranking pembelian customer. Untuk menghitung order per customer, gunakan `COUNT(DISTINCT orderNumber)`.
-- Nilai mata uang pada workbook mengikuti angka sumber dataset dan ditampilkan dalam satuan dolar Amerika pada laporan.
+- `Sales`, `Cost`, and `Profit` are metrics at the **order-detail level**, not unique order-level values.
+- Use `SUM()` on the relevant column to calculate total sales or profit.
+- To calculate the number of orders, use `COUNT(DISTINCT orderNumber)` rather than counting worksheet rows.
+- To calculate the number of customers, use `COUNT(DISTINCT customerNumber)`.
+- `purchaseNumber` should not be counted as the number of orders because it represents a customer's purchase ranking. To calculate orders per customer, use `COUNT(DISTINCT orderNumber)`.
+- The currency values follow the source dataset and are presented in US dollars in the report.
 
-## Ringkasan Dataset Project
+## Project Dataset Summary
 
-Berdasarkan worksheet `Project` pada workbook:
+Based on the `Project` worksheet in the workbook:
 
-- Periode transaksi: **6 Januari 2003 – 31 Mei 2005**
-- **2.996** baris detail transaksi
-- **326** order unik
-- **98** customer unik
-- **109** produk unik
-- **21** negara
-- **105.516** unit terjual
-- Total sales: sekitar **$9,604 juta**
-- Total cost: sekitar **$5,778 juta**
-- Total profit: sekitar **$3,826 juta**
-- Profit margin: sekitar **39,84%**
+- Transaction period: **January 6, 2003 – May 31, 2005**
+- **2,996** transaction-detail rows
+- **326** unique orders
+- **98** unique customers
+- **109** unique products
+- **21** countries
+- **105,516** units sold
+- Total sales: approximately **$9.604 million**
+- Total cost: approximately **$5.778 million**
+- Total profit: approximately **$3.826 million**
+- Profit margin: approximately **39.84%**
 
-## Ringkasan Insight
+## Key Insights
 
-Insight berikut berasal dari PivotTable dan laporan yang tersimpan di repository:
+The following insights are based on the PivotTables and report included in the repository:
 
-1. **Performa finansial**
-   - Total sales sekitar `$9,604M` dan total profit sekitar `$3,826M`.
-   - Profit margin keseluruhan sekitar `39,84%`.
+1. **Financial performance**
+   - Total sales were approximately `$9.604M`, while total profit was approximately `$3.826M`.
+   - The overall profit margin was approximately `39.84%`.
 
-2. **Produk terlaris**
-   - `1992 Ferrari 360 Spider red` menjadi produk dengan unit terjual terbanyak, yaitu **1.808 unit**.
-   - `1937 Lincoln Berline` berada di posisi berikutnya dengan **1.111 unit**.
-   - Product line dengan proporsi unit terbesar adalah **Classic Cars**, diikuti `Vintage Cars`.
+2. **Best-selling products**
+   - `1992 Ferrari 360 Spider red` was the best-selling product by units, with **1,808 units sold**.
+   - `1937 Lincoln Berline` ranked second, with **1,111 units sold**.
+   - `Classic Cars` was the product line with the largest share of units sold, followed by `Vintage Cars`.
 
-3. **Profit berdasarkan negara**
-   - **USA** merupakan kontributor profit terbesar, sekitar `$1,309M`.
-   - Negara dengan kontribusi profit besar berikutnya adalah **Spain** dan **France**.
+3. **Profit by country**
+   - **USA** was the largest contributor to profit, generating approximately `$1.309M`.
+   - **Spain** and **France** were the next largest contributors.
 
-4. **Pola musiman**
-   - Sales meningkat tajam pada periode **Oktober–November**.
-   - November merupakan bulan dengan sales tertinggi pada ringkasan workbook.
-   - Periode Juni–September relatif lebih rendah dibandingkan puncak akhir tahun.
+4. **Seasonality**
+   - Sales increased significantly during **October–November**.
+   - November was the highest-sales month in the workbook summary.
+   - The June–September period was relatively lower than the year-end peak.
 
-5. **Customer utama**
-   - Pada PivotTable, `Euro+ Shopping Channel` memiliki nilai `Count of purchaseNumber` tertinggi, yaitu **259** baris transaksi/detail pembelian.
-   - `Mini Gifts Distributors Ltd,` berada di urutan berikutnya dengan **180** baris transaksi/detail pembelian.
-   - Angka tersebut bukan jumlah order unik; dari worksheet `Project`, keduanya masing-masing memiliki **26** dan **17** `orderNumber` unik.
+5. **Key customers**
+   - In the PivotTable, `Euro+ Shopping Channel` had the highest `Count of purchaseNumber`, with **259 transaction-detail/purchase rows**.
+   - `Mini Gifts Distributors Ltd,` ranked second, with **180 transaction-detail/purchase rows**.
+   - These figures are not unique order counts. In the `Project` worksheet, the two customers had **26** and **17** unique `orderNumber` values, respectively.
 
-## Rekomendasi Bisnis
+## Business Recommendations
 
-Berdasarkan pola tersebut, beberapa tindakan yang dapat dipertimbangkan adalah:
+Based on these patterns, the following actions can be considered:
 
-- Menyiapkan inventory lebih awal untuk mengurangi risiko stockout sebelum periode Oktober–November.
-- Menawarkan loyalty incentive, volume-based rebate, atau kontrak khusus kepada customer dengan volume pembelian tinggi.
-- Mengevaluasi alokasi marketing berdasarkan kontribusi profit tiap negara, dengan perhatian khusus pada pasar USA, Spain, dan France.
-- Menggunakan dashboard untuk memantau perubahan sales, profit, product line, dan customer secara berkala.
+- Prepare inventory earlier to reduce the risk of stockouts before the October–November peak season.
+- Offer loyalty incentives, volume-based rebates, or customized contracts to high-volume customers.
+- Evaluate marketing budget allocation based on each country's profit contribution, with particular attention to the USA, Spain, and France.
+- Use the dashboard to monitor changes in sales, profit, product lines, and customer performance regularly.
 
-Rekomendasi tersebut bersifat analisis deskriptif dari dataset historis; keputusan aktual tetap perlu mempertimbangkan inventory, kapasitas operasional, biaya marketing, dan faktor bisnis lain.
+These recommendations are based on descriptive analysis of historical data. Actual business decisions should also consider inventory levels, operational capacity, marketing costs, and other relevant business factors.
 
-## Cara Menjalankan Query
+## How to Run the Query
 
-1. Gunakan MySQL atau database yang kompatibel dengan sintaks SQL pada `Data.sql`.
-2. Jalankan `Data.sql` untuk membuat database `classicmodels` beserta tabel dan datanya.
-3. Pilih database `classicmodels`.
-4. Jalankan query pada `Ekspor SQL.sql`.
-5. Export hasil query ke CSV/Excel apabila diperlukan.
-6. Buka `Dashboard Project 2.0.xlsx` untuk melihat data Project dan ringkasan PivotTable.
+1. Use MySQL or another database system compatible with the SQL syntax in `Data.sql`.
+2. Run `Data.sql` to create the `classicmodels` database, tables, and source data.
+3. Select the `classicmodels` database.
+4. Run the query in `Ekspor SQL.sql`.
+5. Export the query results to CSV or Excel if needed.
+6. Open `Dashboard Project 2.0.xlsx` to view the `Project` data and PivotTable summaries.
 
-Contoh perhitungan metrik utama:
+Main metric calculations:
 
 ```sql
 Sales  = priceEach * quantityOrdered
@@ -170,17 +170,17 @@ Profit = Sales - Cost
 
 ## Tools
 
-- MySQL atau database SQL kompatibel
+- MySQL or a compatible SQL database
 - Microsoft Excel
-- SQL: `JOIN`, CTE, agregasi, dan window function `DENSE_RANK()`
-- PivotTable dan chart Excel
+- SQL: `JOIN`, CTEs, aggregation, and the `DENSE_RANK()` window function
+- Excel PivotTables and charts
 
-## Catatan Reproduksibilitas
+## Reproducibility Notes
 
-- `Data.sql` berisi dataset sumber sehingga query dapat dijalankan ulang secara lokal.
-- Hasil agregasi dapat mengalami perbedaan pembulatan kecil karena nilai desimal pada Excel/SQL.
-- Pastikan format `orderDate` dikenali sebagai tanggal sebelum membuat grouping berdasarkan tahun atau bulan.
-- Jangan menggunakan `COUNT(*)` sebagai jumlah order tanpa deduplikasi karena dataset berada pada grain order detail.
+- `Data.sql` contains the source dataset, allowing the query to be run again locally.
+- Aggregated results may have minor rounding differences because of decimal handling in Excel and SQL.
+- Make sure `orderDate` is recognized as a date before grouping by year or month.
+- Do not use `COUNT(*)` as the order count without deduplication because the dataset is stored at the order-detail grain.
 
 ## Author
 
@@ -191,11 +191,11 @@ Profit = Sales - Cost
 
 ## License
 
-Repository ini tidak menyertakan file atau pernyataan lisensi khusus. Gunakan dan distribusikan isinya sesuai izin pemilik repository.
+This repository does not include a specific license file or license statement. Use and distribute its contents according to the repository owner's permission.
 
 ---
 
-Project ini menunjukkan bagaimana data transaksi dari SQL dapat dipersiapkan menjadi dataset analitik dan diubah menjadi dashboard Excel yang membantu pemantauan performa penjualan serta pengambilan keputusan berbasis data.
+This project demonstrates how transactional data extracted from SQL can be prepared as an analytical dataset and transformed into an Excel dashboard for monitoring sales performance and supporting data-driven decision-making.
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Data--Analyst--Project-181717?logo=github)](https://github.com/willytaufik8/Data-Analyst-Project)
 
@@ -203,7 +203,7 @@ Project ini menunjukkan bagaimana data transaksi dari SQL dapat dipersiapkan men
 
 **Project By Taufik Willy H.**
 
-Terima kasih.
+Thank you.
 
 LinkedIn: [linkedin.com/in/taufikwilly8](https://www.linkedin.com/in/taufikwilly8)
 Email: Willytaufik8@gmail.com

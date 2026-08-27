@@ -56,7 +56,7 @@ The query produces the following calculated columns:
 |---|---|
 | [`Data.sql`](Data.sql) | SQL dump of the `classicmodels` database, including table structures and source data. |
 | [`Ekspor SQL.sql`](Ekspor%20SQL.sql) | SQL query for extracting and transforming the transactional data for analysis. |
-| [`Dashboard Project.xlsx`](Dashboard%20Project%202.0.xlsx) | Excel workbook containing the Project dataset, PivotTables, metrics, and visualizations. |
+| [`Dashboard Project.xlsx`](Dashboard%20Project%20.xlsx) | Excel workbook containing the Project dataset, PivotTables, metrics, and visualizations. |
 
 
 ## Excel Workbook Structure
@@ -87,15 +87,6 @@ The `Project` worksheet uses one row for one **product detail within an order**.
 | `Cost` | Decimal | The total product cost for the transaction-detail row. Formula: `buyPrice × quantityOrdered`. |
 | `Profit` | Decimal | The gross profit for the transaction-detail row. Formula: `Sales − Cost`. |
 | `purchaseNumber` | Integer | The customer's purchase sequence based on `orderDate`, calculated with `DENSE_RANK()` and partitioned by `customerNumber`. The same value can appear on multiple product rows from the same order/date. |
-
-### Variable Usage Notes
-
-- `Sales`, `Cost`, and `Profit` are metrics at the **order-detail level**, not unique order-level values.
-- Use `SUM()` on the relevant column to calculate total sales or profit.
-- To calculate the number of orders, use `COUNT(DISTINCT orderNumber)` rather than counting worksheet rows.
-- To calculate the number of customers, use `COUNT(DISTINCT customerNumber)`.
-- `purchaseNumber` should not be counted as the number of orders because it represents a customer's purchase ranking. To calculate orders per customer, use `COUNT(DISTINCT orderNumber)`.
-- The currency values follow the source dataset and are presented in US dollars in the report.
 
 ## Project Dataset Summary
 
@@ -136,9 +127,8 @@ The following insights are based on the PivotTables and report included in the r
    - The June–September period was relatively lower than the year-end peak.
 
 5. **Key customers**
-   - In the PivotTable, `Euro+ Shopping Channel` had the highest `Count of purchaseNumber`, with **259 transaction-detail/purchase rows**.
-   - `Mini Gifts Distributors Ltd,` ranked second, with **180 transaction-detail/purchase rows**.
-   - These figures are not unique order counts. In the `Project` worksheet, the two customers had **26** and **17** unique `orderNumber` values, respectively.
+   - In the PivotTable, `Euro+ Shopping Channel` had the highest `Count of purchaseNumber`, with **259 transaction**.
+   - `Mini Gifts Distributors Ltd,` ranked second, with **180 transaction**.
 
 ## Business Recommendations
 
@@ -158,7 +148,7 @@ These recommendations are based on descriptive analysis of historical data. Actu
 3. Select the `classicmodels` database.
 4. Run the query in `Ekspor SQL.sql`.
 5. Export the query results to CSV or Excel if needed.
-6. Open `Dashboard Project 2.0.xlsx` to view the `Project` data and PivotTable summaries.
+6. Open `Dashboard Project.xlsx` to view the `Project` data and PivotTable summaries.
 
 Main metric calculations:
 
@@ -180,8 +170,7 @@ Profit = Sales - Cost
 - `Data.sql` contains the source dataset, allowing the query to be run again locally.
 - Aggregated results may have minor rounding differences because of decimal handling in Excel and SQL.
 - Make sure `orderDate` is recognized as a date before grouping by year or month.
-- Do not use `COUNT(*)` as the order count without deduplication because the dataset is stored at the order-detail grain.
-
+  
 ## Author
 
 **Taufik Willy H.**

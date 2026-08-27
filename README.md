@@ -127,7 +127,7 @@ The following insights are based on the PivotTables and report included in the r
    - The June–September period was relatively lower than the year-end peak.
 
 5. **Key customers**
-   - In the PivotTable, `Euro+ Shopping Channel` had the highest `Count of purchaseNumber`, with **259 transaction**.
+   - In the PivotTable, `Euro+ Shopping Channel` had the highest total transaction, with **259 transaction**.
    - `Mini Gifts Distributors Ltd,` ranked second, with **180 transaction**.
 
 ## Business Recommendations

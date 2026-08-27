@@ -56,12 +56,12 @@ The query produces the following calculated columns:
 |---|---|
 | [`Data.sql`](Data.sql) | SQL dump of the `classicmodels` database, including table structures and source data. |
 | [`Ekspor SQL.sql`](Ekspor%20SQL.sql) | SQL query for extracting and transforming the transactional data for analysis. |
-| [`Dashboard Project 2.0.xlsx`](Dashboard%20Project%202.0.xlsx) | Excel workbook containing the Project dataset, PivotTables, metrics, and visualizations. |
-| [`Personal Project By Taufik Willy H..pdf`](Personal%20Project%20By%20Taufik%20Willy%20H..pdf) | Presentation report containing the analysis results and business recommendations. |
+| [`Dashboard Project.xlsx`](Dashboard%20Project%202.0.xlsx) | Excel workbook containing the Project dataset, PivotTables, metrics, and visualizations. |
+
 
 ## Excel Workbook Structure
 
-The `Dashboard Project 2.0.xlsx` workbook contains three worksheets:
+The `Dashboard Project.xlsx` workbook contains three worksheets:
 
 - **Pivot**: summary metrics, product line analysis, top products, monthly and yearly sales, profit by country, monthly profit, and top buyers.
 - **Project**: the transaction-level dataset produced from the SQL query and prepared for analysis.
